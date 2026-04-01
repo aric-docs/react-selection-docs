@@ -29,7 +29,7 @@ The slot system allows you to customize how each item is rendered. A slot can be
 
 ### Type Safety
 
-ReactSelection uses TypeScript generics `<T extends { value: any }>` to ensure your data items always have a `value` property, and all slot props are fully typed.
+ReactSelection uses TypeScript generics `<T>` — data items can have any shape. Use `valueExtractor` (string or function) to tell the component which field to use for selection identity. All slot props are fully typed.
 
 ## Quick Links
 

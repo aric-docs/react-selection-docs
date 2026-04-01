@@ -25,12 +25,25 @@ pnpm add @jswork/react-selection
 
 ## Data Requirements
 
-All data items must have a `value` property. This is required for the selection logic to work:
+Data items can have **any shape**. By default, ReactSelection uses the `value` field for selection identity. If your data uses a different field (like `id` or `sku`), use the `valueExtractor` prop:
 
 ```typescript
+// Default: uses item.value
 interface Fruit {
-  value: string; // Required — used for selection identification
-  label: string; // Any additional fields you need
+  value: string;
+  label: string;
+}
+
+// Custom: uses item.id via valueExtractor="id"
+interface User {
+  id: number;
+  name: string;
+}
+
+// Custom: uses a function via valueExtractor={(item) => item.sku}
+interface Product {
+  sku: string;
+  title: string;
 }
 ```
 

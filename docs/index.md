@@ -20,15 +20,18 @@ features:
   - title: Single & Multiple Selection
     emoji: ✅
     description: Toggle between single and multiple selection via the `multiple` prop. Supports allow deselect.
+  - title: Flexible Value Extraction
+    emoji: 🔑
+    description: `valueExtractor` supports string key or custom function — data items can have any shape.
   - title: Type-safe Generics
     emoji: 🔒
-    description: Full TypeScript support with `<T extends { value: any }>` ensures data integrity throughout.
+    description: Full TypeScript support with `<T>` — works with any data type.
   - title: Max Limit Control
     emoji: 📊
     description: Configurable maximum for multiple selection with error callback when limit is exceeded.
   - title: Built on ReactList
     emoji: 🏗️
-    description: Inherits all ReactListProps (data, keyExtractor, etc.) and adds selection behavior on top.
+    description: Inherits all ReactListProps and adds selection behavior on top.
 ---
 
 ## Installation

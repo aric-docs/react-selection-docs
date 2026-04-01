@@ -32,13 +32,31 @@ The user's `slots.item` is wrapped internally. Selection state (`active`, `disab
 
 ## Internal Flow
 
+### Value Extraction
+
+`valueExtractor` serves a dual purpose — it extracts both the **selection identity** and **React keys** for the underlying list:
+
+```
+valueExtractor: 'value' (default)
+  → item.value is used for selection comparison
+  → item.value is used as React key
+
+valueExtractor: 'id'
+  → item.id is used for selection comparison
+  → item.id is used as React key
+
+valueExtractor: (item) => item.sku
+  → item.sku is used for selection comparison
+  → item.sku is used as React key
+```
+
 ### Single Selection
 
 ```
 User clicks item
   → onClick handler fires
     → If item is already selected and allowDeselect is true → deselect (value = null)
-    → If item is not selected → select (value = item.value)
+    → If item is not selected → select (value = extractedValue)
   → onChange callback fires with new value
 ```
 
@@ -58,14 +76,18 @@ User clicks item
 
 - **Memoized handlers** — Selection handlers are memoized with `useCallback`
 - **Deep equality** — State comparison uses `fast-deep-equal` for accurate change detection
-- **Key handling** — Keys default to `item.value`, falling back to `index` for React's reconciliation
+- **Value extraction** — `valueExtractor` handles both selection identity and React keys in one pass
 
 ## Type System
 
 ```typescript
-// The generic constraint ensures data items have a value field
-interface ReactSelectionProps<T extends { value: any }> {
+// valueExtractor type — string key or custom function
+type ValueExtractor<T> = string | ((item: T) => any);
+
+// Generic works with any data type
+interface ReactSelectionProps<T> {
   data: T[];
+  valueExtractor?: ValueExtractor<T>; // default: 'value'
   // ... other props
 }
 
@@ -98,7 +120,8 @@ react-selection/
 │   │       └── index.tsx       # Main component
 │   └── example/
 │       └── src/
-│           └── App.tsx         # Usage examples
+│           ├── App.tsx         # Demo entry
+│           └── demos/          # Individual demo files
 ├── llms.txt                    # LLM context file
 └── README.md
 ```

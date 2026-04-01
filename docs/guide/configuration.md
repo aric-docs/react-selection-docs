@@ -7,26 +7,94 @@ order: 1
 
 ## ReactSelection Props
 
-ReactSelection extends `Omit<ReactListProps<T>, 'slots'>` with the following selection-specific props:
+ReactSelection extends `Omit<ReactListProps<T>, 'slots' | 'keyExtractor'>` with the following selection-specific props:
 
 ### Selection Props
 
-| Property        | Description                                        | Type                                   | Default                        |
-| --------------- | -------------------------------------------------- | -------------------------------------- | ------------------------------ |
-| `allowDeselect` | Allow deselecting in single selection mode         | `boolean`                              | `false`                        |
-| `max`           | Maximum selections allowed (multiple mode)         | `number`                               | `1000`                         |
-| `multiple`      | Enable multiple selection                          | `boolean`                              | `false`                        |
-| `value`         | Current selected value                             | `any`                                  | `null` (or `[]` when multiple) |
-| `onChange`      | Callback when selection changes                    | `(value: any) => void`                 | -                              |
-| `onError`       | Callback when an error occurs (e.g., max exceeded) | `(error: { code: ErrorCode }) => void` | -                              |
-| `slots`         | Slot configuration for rendering                   | `SelectionSlots<T>`                    | -                              |
+| Property         | Description                                        | Type                                   | Default                        |
+| ---------------- | -------------------------------------------------- | -------------------------------------- | ------------------------------ |
+| `allowDeselect`  | Allow deselecting in single selection mode         | `boolean`                              | `false`                        |
+| `max`            | Maximum selections allowed (multiple mode)         | `number`                               | `1000`                         |
+| `multiple`       | Enable multiple selection                          | `boolean`                              | `false`                        |
+| `value`          | Current selected value                             | `any`                                  | `null` (or `[]` when multiple) |
+| `valueExtractor` | How to extract selection identity from data items  | `string \| ((item: T) => any)`         | `'value'`                      |
+| `onChange`       | Callback when selection changes                    | `(value: any) => void`                 | -                              |
+| `onError`        | Callback when an error occurs (e.g., max exceeded) | `(error: { code: ErrorCode }) => void` | -                              |
+| `slots`          | Slot configuration for rendering                   | `SelectionSlots<T>`                    | -                              |
 
 ### Inherited from ReactList
 
-| Property       | Description                                   | Type                                                        | Default      |
-| -------------- | --------------------------------------------- | ----------------------------------------------------------- | ------------ |
-| `data`         | Array of data items (must have `value` field) | `T[]`                                                       | -            |
-| `keyExtractor` | Custom key for list items                     | `keyof T \| ((item: T, index: number) => string \| number)` | `item.value` |
+| Property | Description                     | Type  | Default |
+| -------- | ------------------------------- | ----- | ------- |
+| `data`   | Array of data items (any shape) | `T[]` | -       |
+
+## valueExtractor
+
+The `valueExtractor` prop tells the component how to identify each item for selection. It also serves as the React key for the underlying list. This replaces the separate `keyExtractor` prop — one config handles both.
+
+### Type
+
+```typescript
+type ValueExtractor<T> = string | ((item: T) => any);
+```
+
+### Default Behavior
+
+By default, `valueExtractor` is `'value'`, so it reads `item.value`:
+
+```tsx
+const items = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+];
+
+// No valueExtractor needed — uses item.value by default
+<ReactSelection
+  data={items}
+  value={selected}
+  onChange={setSelected}
+  slots={{ item: ItemSlot }}
+/>;
+```
+
+### String Key
+
+When your data items don't have a `value` field, specify which field to use:
+
+```tsx
+const users = [
+  { id: 1, name: 'Alice' },
+  { id: 2, name: 'Bob' },
+  { id: 3, name: 'Charlie' },
+];
+
+<ReactSelection
+  data={users}
+  valueExtractor="id"
+  value={selectedId}
+  onChange={setSelectedId}
+  slots={{ item: ItemSlot }}
+/>;
+```
+
+### Function Extractor
+
+For more complex extraction logic, use a function:
+
+```tsx
+const products = [
+  { sku: 'A-001', title: 'Widget' },
+  { sku: 'B-002', title: 'Gadget' },
+];
+
+<ReactSelection
+  data={products}
+  valueExtractor={(item) => item.sku}
+  value={selected}
+  onChange={setSelected}
+  slots={{ item: ItemSlot }}
+/>;
+```
 
 ## Slots
 
@@ -128,39 +196,6 @@ enum ErrorCode {
       console.warn('Maximum selections reached');
     }
   }}
-  slots={{ item: ItemSlot }}
-/>
-```
-
-## Key Extractor
-
-By default, keys are derived from `item.value`. You can customize this with `keyExtractor`:
-
-### String Key
-
-```tsx
-const items = [
-  { id: 1, value: 'apple', label: 'Apple' },
-  { id: 2, value: 'banana', label: 'Banana' },
-];
-
-<ReactSelection
-  data={items}
-  keyExtractor="id"
-  value={selected}
-  onChange={setSelected}
-  slots={{ item: ItemSlot }}
-/>;
-```
-
-### Function Key
-
-```tsx
-<ReactSelection
-  data={items}
-  keyExtractor={(item, index) => `fruit-${item.value}`}
-  value={selected}
-  onChange={setSelected}
   slots={{ item: ItemSlot }}
 />
 ```

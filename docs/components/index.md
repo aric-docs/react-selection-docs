@@ -16,31 +16,32 @@ A headless, type-safe selection component for React with slot-based architecture
 
 ## Main Exports
 
-| Export                   | Type      | Description                                |
-| ------------------------ | --------- | ------------------------------------------ |
-| `ReactSelection`         | Component | The main selection component               |
-| `ReactSelectionProps`    | Interface | Props type for the component               |
-| `SelectionItemSlotProps` | Interface | Props passed to the item slot              |
-| `Slot`                   | Type      | Slot type (component, function, or object) |
-| `ErrorCode`              | Enum      | Error codes for selection errors           |
+| Export                   | Type      | Description                                         |
+| ------------------------ | --------- | --------------------------------------------------- |
+| `ReactSelection`         | Component | The main selection component                        |
+| `ReactSelectionProps`    | Interface | Props type for the component                        |
+| `SelectionItemSlotProps` | Interface | Props passed to the item slot                       |
+| `ValueExtractor`         | Type      | `string \| ((item: T) => any)` for value extraction |
+| `Slot`                   | Type      | Slot type (component, function, or object)          |
+| `ErrorCode`              | Enum      | Error codes for selection errors                    |
 
 ## API
 
 ### ReactSelection Props
 
-Extends `Omit<ReactListProps<T>, 'slots'>` plus:
+Extends `Omit<ReactListProps<T>, 'slots' | 'keyExtractor'>` plus:
 
-| Property        | Description                                        | Type                                                        | Default                        |
-| --------------- | -------------------------------------------------- | ----------------------------------------------------------- | ------------------------------ |
-| `data`          | Array of data items (each must have `value` field) | `T[]`                                                       | -                              |
-| `keyExtractor`  | Custom key for list items                          | `keyof T \| ((item: T, index: number) => string \| number)` | `item.value`                   |
-| `allowDeselect` | Allow deselecting in single selection mode         | `boolean`                                                   | `false`                        |
-| `max`           | Maximum selections allowed (multiple mode)         | `number`                                                    | `1000`                         |
-| `multiple`      | Enable multiple selection                          | `boolean`                                                   | `false`                        |
-| `value`         | Current selected value                             | `any`                                                       | `null` (or `[]` when multiple) |
-| `onChange`      | Callback when selection changes                    | `(value: any) => void`                                      | -                              |
-| `onError`       | Callback when an error occurs                      | `(error: { code: ErrorCode }) => void`                      | -                              |
-| `slots`         | Slot configuration (see below)                     | `SelectionSlots<T>`                                         | -                              |
+| Property         | Description                                                | Type                                   | Default                        |
+| ---------------- | ---------------------------------------------------------- | -------------------------------------- | ------------------------------ |
+| `data`           | Array of data items (any shape)                            | `T[]`                                  | -                              |
+| `valueExtractor` | How to extract selection identity (also used as React key) | `string \| ((item: T) => any)`         | `'value'`                      |
+| `allowDeselect`  | Allow deselecting in single selection mode                 | `boolean`                              | `false`                        |
+| `max`            | Maximum selections allowed (multiple mode)                 | `number`                               | `1000`                         |
+| `multiple`       | Enable multiple selection                                  | `boolean`                              | `false`                        |
+| `value`          | Current selected value                                     | `any`                                  | `null` (or `[]` when multiple) |
+| `onChange`       | Callback when selection changes                            | `(value: any) => void`                 | -                              |
+| `onError`        | Callback when an error occurs                              | `(error: { code: ErrorCode }) => void` | -                              |
+| `slots`          | Slot configuration (see below)                             | `SelectionSlots<T>`                    | -                              |
 
 ### SelectionItemSlotProps
 
@@ -110,6 +111,54 @@ function App() {
     />
   );
 }
+```
+
+### Custom valueExtractor (string)
+
+```tsx
+// Data without a `value` field — use `id` instead
+const users = [
+  { id: 1, name: 'Alice' },
+  { id: 2, name: 'Bob' },
+  { id: 3, name: 'Charlie' },
+];
+
+<ReactSelection
+  data={users}
+  valueExtractor="id"
+  value={selectedId}
+  onChange={setSelectedId}
+  slots={{
+    item: ({ item, active, onClick }) => (
+      <button className={active ? 'active' : ''} onClick={onClick}>
+        {item.name}
+      </button>
+    ),
+  }}
+/>;
+```
+
+### Custom valueExtractor (function)
+
+```tsx
+const products = [
+  { sku: 'A-001', title: 'Widget' },
+  { sku: 'B-002', title: 'Gadget' },
+];
+
+<ReactSelection
+  data={products}
+  valueExtractor={(item) => item.sku}
+  value={selected}
+  onChange={setSelected}
+  slots={{
+    item: ({ item, active, onClick }) => (
+      <div onClick={onClick} className={active ? 'active' : ''}>
+        {item.title}
+      </div>
+    ),
+  }}
+/>;
 ```
 
 ### Multiple Selection with Max Limit

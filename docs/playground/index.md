@@ -31,6 +31,10 @@ Interactive examples demonstrating all ReactSelection features. Each demo is ful
 
 <code src="./demos/slot-component.tsx">Using a component reference with default props</code>
 
-## Custom Key Extractor
+## valueExtractor (string)
 
-<code src="./demos/custom-key.tsx">Custom key extractor using string or function</code>
+<code src="./demos/value-extractor-string.tsx">Use valueExtractor="id" when data items don't have a value field</code>
+
+## valueExtractor (function)
+
+<code src="./demos/value-extractor-fn.tsx">Use a custom function to extract selection identity</code>

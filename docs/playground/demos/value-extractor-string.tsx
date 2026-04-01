@@ -1,30 +1,31 @@
 import React, { useState } from 'react';
 import { ReactSelection } from '@jswork/react-selection';
 
-const items = [
-  { id: 1, value: 'tokyo', label: 'Tokyo' },
-  { id: 2, value: 'paris', label: 'Paris' },
-  { id: 3, value: 'london', label: 'London' },
-  { id: 4, value: 'nyc', label: 'New York' },
+// Data without a `value` field — use `id` instead
+const users = [
+  { id: 1, name: 'Alice' },
+  { id: 2, name: 'Bob' },
+  { id: 3, name: 'Charlie' },
+  { id: 4, name: 'Diana' },
 ];
 
 export default () => {
-  const [selected, setSelected] = useState('tokyo');
+  const [selectedId, setSelectedId] = useState(1);
 
   return (
     <div>
-      <h3 style={{ marginBottom: '12px' }}>Custom Key Extractor</h3>
+      <h3 style={{ marginBottom: '12px' }}>valueExtractor (string)</h3>
       <p style={{ marginBottom: '8px', color: '#666' }}>
-        Using <code>keyExtractor="id"</code> instead of default <code>item.value</code>
+        Using <code>valueExtractor="id"</code> — data has no <code>value</code> field
       </p>
       <p style={{ marginBottom: '8px', color: '#666' }}>
-        Selected: <strong>{selected}</strong>
+        Selected ID: <strong>{selectedId}</strong>
       </p>
       <ReactSelection
-        data={items}
-        keyExtractor="id"
-        value={selected}
-        onChange={setSelected}
+        data={users}
+        valueExtractor="id"
+        value={selectedId}
+        onChange={setSelectedId}
         slots={{
           item: ({ item, active, onClick }) => (
             <button
@@ -44,7 +45,7 @@ export default () => {
               }}
             >
               <span style={{ marginRight: '4px', opacity: 0.6 }}>#{item.id}</span>
-              {item.label}
+              {item.name}
             </button>
           ),
         }}
