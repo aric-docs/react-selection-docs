@@ -9,8 +9,11 @@ importers:
   .:
     dependencies:
       '@jswork/react-selection':
-        specifier: ^2.0.0
-        version: 2.0.0(@jswork/react-list@2.0.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^2.0.2
+        version: 2.0.2(fast-deep-equal@3.1.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      fast-deep-equal:
+        specifier: ^3.1.3
+        version: 3.1.3
     devDependencies:
       '@commitlint/cli':
         specifier: ^17.1.2
@@ -1476,14 +1479,12 @@ packages:
   '@jswork/presets-tailwind@1.2.37':
     resolution: {integrity: sha512-DQ+39NkekCaJok+bnlrWlWKVW6o+qVPXM5pKY9d6A1YRvmAfTzsT7SCeu+P5a4SRJ6+aSQtC77aqQMbw9WJHrw==}
 
-  '@jswork/react-list@2.0.0':
-    resolution: {integrity: sha512-nMSFQhlb4c80PbXMqDpFdRiK1fIOLynFKSCRjCYsODlYtHjXq5b/A+mCL76jJm8zyLdw2mkXZoPQ5GSIUEtaRg==}
+  '@jswork/react-list@2.0.1':
+    resolution: {integrity: sha512-zSs1bq8VnGHhoVEEnvHUSA2AgNIHmaDi+lpP31AX/TJWRpASLxh4QvxD+qDQj5q4XOPzUFIitZ33fO+B7fnL9A==}
 
-  '@jswork/react-selection@2.0.0':
-    resolution: {integrity: sha512-i7vFt7KQGeErB+gbJYcWuosPPPF66iIh/2qhLWcULWMbK1fOzW16rWT770UjdPRVHBKrTqBhmmEGLsC9ZL7Bmw==}
+  '@jswork/react-selection@2.0.2':
+    resolution: {integrity: sha512-OW+vaBij1I54r3/oR9uAFE7zu8rUzwtm6z1MvGjcrjswx6+0Gp6gksk4XfQVs8XaQYW9Wui18lSmREMXCSe7sw==}
     peerDependencies:
-      '@jswork/react-list': ^2.0.0
-      classnames: latest
       fast-deep-equal: latest
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -10317,15 +10318,16 @@ snapshots:
       '@jswork/tailwind-shortcuts': 1.0.38
       '@jswork/tailwind-width': 1.0.7
 
-  '@jswork/react-list@2.0.0':
+  '@jswork/react-list@2.0.1':
     dependencies:
       '@jswork/class-imperative-handle': 1.0.1
       '@jswork/noop': 1.0.0
       classnames: 2.5.1
 
-  '@jswork/react-selection@2.0.0(@jswork/react-list@2.0.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@jswork/react-selection@2.0.2(fast-deep-equal@3.1.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@jswork/react-list': 2.0.0
+      '@jswork/react-list': 2.0.1
+      fast-deep-equal: 3.1.3
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
