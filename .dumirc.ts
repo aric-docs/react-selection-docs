@@ -13,8 +13,8 @@ export default defineConfig({
     codeBlockMode: 'passive',
   },
   themeConfig: {
-    name: 'react-selection-docs',
-    description: 'Docs for react-selection.',
+    name: 'ReactSelection',
+    description: 'A headless, type-safe selection component for React.',
     nav: [
       {
         title: 'Guide',

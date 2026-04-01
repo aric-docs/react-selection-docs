@@ -5,122 +5,144 @@ order: 0
 
 # Getting Started
 
-Dumi Docs Template is a starting point for building documentation sites with dumi. This template comes with pre-configured tooling and best practices.
-
 ## Prerequisites
 
-- Node.js >= 22 (use [.nvmrc](/.nvmrc) with nvm)
-- npm, yarn, or pnpm
+- React >= 16.8 (hooks support)
+- `fast-deep-equal` (peer dependency)
 
 ## Installation
 
-### Clone the Template
-
-```bash
-git clone https://github.com/afeiship/react-selection-docs.git
-cd react-selection-docs
-```
-
-### Install Dependencies
-
 ```bash
 # npm
-npm install
+npm install @jswork/react-selection
 
 # yarn
-yarn install
+yarn add @jswork/react-selection
 
 # pnpm
-pnpm install
+pnpm add @jswork/react-selection
 ```
 
-## Development
+## Data Requirements
 
-### Start Dev Server
+All data items must have a `value` property. This is required for the selection logic to work:
 
-```bash
-npm run dev
+```typescript
+interface Fruit {
+  value: string; // Required — used for selection identification
+  label: string; // Any additional fields you need
+}
 ```
 
-The documentation site will be available at `http://localhost:8000`
+Your data array:
 
-### Directory Structure
-
-```
-react-selection-docs
-├── .dumirc.ts          # Dumi configuration
-├── docs                # Documentation files
-│   ├── index.md       # Home page
-│   ├── guide          # Guide section
-│   └── components     # Component documentation
-├── public             # Static assets
-│   └── logo.png       # Site logo
-└── workbox-config.cjs # PWA configuration
+```tsx
+const items = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'orange', label: 'Orange' },
+];
 ```
 
-## Available Scripts
+## Basic Single Selection
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run start` - Alias for `npm run dev`
+The simplest usage — select one item from a list:
 
-## Configuration
+```tsx
+import { useState } from 'react';
+import { ReactSelection } from '@jswork/react-selection';
 
-The main configuration is in [`.dumirc.ts`](/.dumirc.ts):
+const items = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'orange', label: 'Orange' },
+];
 
-```ts
-import { defineConfig } from 'dumi';
+function App() {
+  const [selected, setSelected] = useState('apple');
 
-export default defineConfig({
-  base: '/react-selection-docs/',           // Base path for deployment
-  publicPath: '/react-selection-docs/',     // Public path for assets
-  logo: '/react-selection-docs/logo.png',   // Site logo
-  locales: [{ id: 'en-US', name: 'English' }],
-  themeConfig: {
-    name: 'Dumi Docs',           // Site name
-    description: 'A dumi documentation template project.',
-    nav: [...],                  // Navigation
-    socialLinks: {
-      github: 'https://github.com/afeiship/react-selection-docs',
-    },
-  },
-});
+  return (
+    <ReactSelection
+      data={items}
+      value={selected}
+      onChange={setSelected}
+      slots={{
+        item: ({ item, active, onClick }) => (
+          <button
+            style={{
+              padding: '8px 16px',
+              background: active ? '#1890ff' : '#fff',
+              color: active ? '#fff' : '#333',
+              border: '1px solid #d9d9d9',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              marginRight: '8px',
+            }}
+            onClick={onClick}
+          >
+            {item.label}
+          </button>
+        ),
+      }}
+    />
+  );
+}
 ```
 
-## Adding Content
+## Multiple Selection
 
-### Creating Pages
+Enable multi-select with the `multiple` prop:
 
-Create markdown files in the `docs` directory:
+```tsx
+function App() {
+  const [selected, setSelected] = useState([]);
 
-```markdown
----
-title: My Page
-order: 1
----
-
-# My Page Content
-
-Write your documentation here.
+  return (
+    <ReactSelection
+      multiple
+      data={items}
+      value={selected}
+      onChange={setSelected}
+      slots={{
+        item: ({ item, active, onClick }) => (
+          <button
+            style={{
+              padding: '8px 16px',
+              background: active ? '#1890ff' : '#fff',
+              color: active ? '#fff' : '#333',
+              border: '1px solid #d9d9d9',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              marginRight: '8px',
+            }}
+            onClick={onClick}
+          >
+            {active ? '✓ ' : ''}
+            {item.label}
+          </button>
+        ),
+      }}
+    />
+  );
+}
 ```
 
-### Organizing Sections
+## Controlled Component
 
-Create subdirectories to organize your documentation:
+ReactSelection is a **controlled component** — you manage the state via `value` and `onChange`:
 
-```
-docs/
-├── guide/
-│   ├── getting-started.md
-│   ├── configuration.md
-│   └── deployment.md
-└── components/
-    ├── index.md
-    └── button.md
+```tsx
+// Single selection
+const [value, setValue] = useState(null);
+<ReactSelection value={value} onChange={setValue} ... />
+
+// Multiple selection (initial value should be an array)
+const [value, setValue] = useState([]);
+<ReactSelection multiple value={value} onChange={setValue} ... />
 ```
 
 ## Next Steps
 
-- [Configuration](/guide/configuration) - Customize your documentation site
-- [Deployment](/guide/deployment) - Deploy your documentation site
+- [Configuration](./configuration) — Explore all available props and slot types
+- [Playground](/playground) — Interactive examples
+- [Architecture](./architecture) — Learn how it works internally

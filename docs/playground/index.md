@@ -5,21 +5,32 @@ order: 1
 
 # Playground
 
-Welcome to the interactive playground! Here you can explore live demos with real-time editing capabilities.
+Interactive examples demonstrating all ReactSelection features. Each demo is fully runnable and editable.
 
-## Features
+## Single Selection
 
-- **Live Editing** - Edit code and see changes immediately
-- **Interactive Demos** - All examples are runnable and editable
-- **Type-Safe** - Full TypeScript support
-- **Best Practices** - Examples following industry standards
+<code src="./demos/single-selection.tsx">Basic single selection with controlled value</code>
 
-## Demo Example
+## Allow Deselect
 
-Here's a simple interactive counter example to get started:
+<code src="./demos/allow-deselect.tsx">Single selection where you can deselect the active item</code>
 
-<code src="./demos/counter.tsx">Interactive Counter</code>
+## Multiple Selection
 
-## Getting Started
+<code src="./demos/multiple-selection.tsx">Select multiple items with checkbox-style UI</code>
 
-You can create your own playground examples by creating markdown files in the `playground` directory. Use the code block syntax with `tsx` or `jsx` language to create interactive demos.
+## Max Limit
+
+<code src="./demos/max-limit.tsx">Multiple selection with a maximum limit of 3</code>
+
+## Empty State
+
+<code src="./demos/empty-state.tsx">Handle empty data array with a custom empty slot</code>
+
+## Slot Component
+
+<code src="./demos/slot-component.tsx">Using a component reference with default props</code>
+
+## Custom Key Extractor
+
+<code src="./demos/custom-key.tsx">Custom key extractor using string or function</code>

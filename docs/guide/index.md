@@ -5,16 +5,33 @@ order: 0
 
 # Guide
 
-Welcome to the react-selection-docs template guide. This section will help you get started with building your documentation site.
+Welcome to the ReactSelection guide. This section covers everything you need to know about using the headless selection component.
 
 ## Topics
 
-- [Getting Started](./getting-started) - Installation and basic usage
-- [Configuration](./configuration) - Customize your documentation site
-- [Deployment](./deployment) - Deploy your documentation site
+- [Getting Started](./getting-started) - Installation, prerequisites, and your first selection
+- [Configuration](./configuration) - All props, types, and slot configuration
+- [Architecture](./architecture) - Design decisions, internals, and how it works
+
+## Key Concepts
+
+### Headless Component
+
+ReactSelection is a **headless** component — it renders no DOM wrapper, no CSS, and no className. You provide all styling through the slot system, giving you complete control over presentation.
+
+### Slot System
+
+The slot system allows you to customize how each item is rendered. A slot can be:
+
+1. **Component** — `<ReactSelection slots={{ item: MyComponent }} />`
+2. **Render function** — `slots={{ item: ({ item }) => <div>{item.label}</div> }}`
+3. **Component with props** — `slots={{ item: { component: MyComp, props: { className: 'item' } } }}`
+
+### Type Safety
+
+ReactSelection uses TypeScript generics `<T extends { value: any }>` to ensure your data items always have a `value` property, and all slot props are fully typed.
 
 ## Quick Links
 
-- [Dumi Official Documentation](https://d.umijs.org)
-- [GitHub Repository](https://github.com/afeiship/react-selection-docs)
-
+- [GitHub Repository](https://github.com/aric-tpls/react-selection-docs)
+- [npm Package](https://www.npmjs.com/package/@jswork/react-selection)

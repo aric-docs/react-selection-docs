@@ -1,73 +1,86 @@
 ---
-title: Dumi Docs Template
+title: ReactSelection
 hero:
-  title: Dumi Docs Template
-  description: A template project for building documentation sites with dumi.
+  title: ReactSelection
+  description: A headless, type-safe selection component for React with slot-based architecture.
   actions:
     - text: Get Started
       link: /guide/getting-started
+    - text: API Reference
+      link: /components
     - text: GitHub
-      link: https://github.com/afeiship/react-selection-docs
+      link: https://github.com/aric-tpls/react-selection-docs
 features:
-  - title: Dumi Powered
-    emoji: 📖
-    description: Built with dumi, a excellent doc tool for component library developers
-  - title: PWA Ready
-    emoji: 🚀
-    description: Out-of-the-box PWA support with workbox for better performance
-  - title: Type-Safe
-    emoji: 🔒
-    description: Full TypeScript support with comprehensive type definitions
-  - title: Modern Tooling
-    emoji: 🛠️
-    description: Pre-configured with husky, commitlint, lint-staged, and prettier
-  - title: Easy to Deploy
-    emoji: 🌐
-    description: Build static sites ready for GitHub Pages, Netlify, or Vercel
-  - title: Customizable
+  - title: Headless / Unstyled
     emoji: 🎨
-    description: Flexible theme configuration with sidebar, navigation, and social links
+    description: No DOM wrapper, no CSS — renders exactly what your slots return. Full control over presentation.
+  - title: Slot-based Architecture
+    emoji: 🧩
+    description: Flexible slot system with typed props for item rendering. Use components, render functions, or both.
+  - title: Single & Multiple Selection
+    emoji: ✅
+    description: Toggle between single and multiple selection via the `multiple` prop. Supports allow deselect.
+  - title: Type-safe Generics
+    emoji: 🔒
+    description: Full TypeScript support with `<T extends { value: any }>` ensures data integrity throughout.
+  - title: Max Limit Control
+    emoji: 📊
+    description: Configurable maximum for multiple selection with error callback when limit is exceeded.
+  - title: Built on ReactList
+    emoji: 🏗️
+    description: Inherits all ReactListProps (data, keyExtractor, etc.) and adds selection behavior on top.
 ---
 
 ## Installation
 
 ```bash
-# Clone this template
-git clone https://github.com/afeiship/react-selection-docs.git
+# npm
+npm install @jswork/react-selection
 
-# Install dependencies
-npm install
+# yarn
+yarn add @jswork/react-selection
 
-# Start development server
-npm run dev
+# pnpm
+pnpm add @jswork/react-selection
 ```
 
 ## Quick Start
 
-```bash
-# Start development server
-npm run dev
+```tsx
+import { ReactSelection } from '@jswork/react-selection';
 
-# Build for production
-npm run build
+const items = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'orange', label: 'Orange' },
+];
 
-# Preview production build
-npm run preview
+function App() {
+  const [selected, setSelected] = useState('apple');
+
+  return (
+    <ReactSelection
+      data={items}
+      value={selected}
+      onChange={setSelected}
+      slots={{
+        item: ({ item, active, onClick }) => (
+          <button
+            className={active ? 'btn-primary' : 'btn-default'}
+            onClick={onClick}
+          >
+            {item.label}
+          </button>
+        ),
+      }}
+    />
+  );
+}
 ```
-
-## Tailwind Demo
-
-<div class="debug x-5 p-2 hover:debug-blue rounded bg-slate-100">
-  <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Get Started</button>
-  <button class="bg-red-200 px-4 py-2 rounded-md">Show Demo</button>
-</div>
 
 ## Documentation
 
-- [Guide](/guide/getting-started) - Get started with the template
-- [Configuration](/guide/configuration) - Customize your documentation site
-- [Deployment](/guide/deployment) - Deploy your documentation site
-
-```
-
-```
+- [Getting Started](/guide/getting-started) - Installation and basic usage
+- [API Reference](/components) - Full component API documentation
+- [Playground](/playground) - Interactive examples and demos
+- [Architecture](/guide/architecture) - Design decisions and internals

@@ -5,124 +5,162 @@ order: 1
 
 # Configuration
 
-Learn how to customize your dumi documentation site.
+## ReactSelection Props
 
-## Dumi Configuration
+ReactSelection extends `Omit<ReactListProps<T>, 'slots'>` with the following selection-specific props:
 
-The main configuration file is `.dumirc.ts` in the project root.
+### Selection Props
 
-### Basic Configuration
+| Property        | Description                                        | Type                                   | Default                        |
+| --------------- | -------------------------------------------------- | -------------------------------------- | ------------------------------ |
+| `allowDeselect` | Allow deselecting in single selection mode         | `boolean`                              | `false`                        |
+| `max`           | Maximum selections allowed (multiple mode)         | `number`                               | `1000`                         |
+| `multiple`      | Enable multiple selection                          | `boolean`                              | `false`                        |
+| `value`         | Current selected value                             | `any`                                  | `null` (or `[]` when multiple) |
+| `onChange`      | Callback when selection changes                    | `(value: any) => void`                 | -                              |
+| `onError`       | Callback when an error occurs (e.g., max exceeded) | `(error: { code: ErrorCode }) => void` | -                              |
+| `slots`         | Slot configuration for rendering                   | `SelectionSlots<T>`                    | -                              |
+
+### Inherited from ReactList
+
+| Property       | Description                                   | Type                                                        | Default      |
+| -------------- | --------------------------------------------- | ----------------------------------------------------------- | ------------ |
+| `data`         | Array of data items (must have `value` field) | `T[]`                                                       | -            |
+| `keyExtractor` | Custom key for list items                     | `keyof T \| ((item: T, index: number) => string \| number)` | `item.value` |
+
+## Slots
+
+The `slots` prop controls how items are rendered. It accepts the following slot entries:
+
+### `slots.item` (required)
+
+The main slot for rendering each selection item. Receives `SelectionItemSlotProps`:
+
+| Property   | Description                                 | Type         |
+| ---------- | ------------------------------------------- | ------------ |
+| `item`     | The current data item                       | `T`          |
+| `index`    | Index in the data array                     | `number`     |
+| `data`     | The full data array                         | `T[]`        |
+| `active`   | Whether this item is currently selected     | `boolean`    |
+| `disabled` | Whether this item is disabled (max reached) | `boolean`    |
+| `onClick`  | Handler to select/deselect this item        | `() => void` |
+
+### `slots.empty` (optional)
+
+Rendered when the data array is empty. Receives `{ data: T[] }`.
+
+## Slot Forms
+
+A slot can be provided in three forms:
+
+### 1. Component Reference
+
+Pass a React component directly:
+
+```tsx
+const ItemSlot = ({ item, active, onClick }: SelectionItemSlotProps<Fruit>) => (
+  <button className={active ? 'active' : ''} onClick={onClick}>
+    {item.label}
+  </button>
+);
+
+<ReactSelection
+  data={items}
+  value={selected}
+  onChange={setSelected}
+  slots={{ item: ItemSlot }}
+/>;
+```
+
+### 2. Render Function
+
+Use an inline render function:
+
+```tsx
+<ReactSelection
+  data={items}
+  value={selected}
+  onChange={setSelected}
+  slots={{
+    item: ({ item, active, onClick }) => (
+      <button onClick={onClick}>{item.label}</button>
+    ),
+  }}
+/>
+```
+
+### 3. Component with Default Props
+
+Pass a component with additional props merged in:
+
+```tsx
+<ReactSelection
+  data={items}
+  value={selected}
+  onChange={setSelected}
+  slots={{
+    item: { component: ItemSlot, props: { className: 'btn-sm' } },
+  }}
+/>
+```
+
+## ErrorCode
+
+The `onError` callback receives an object with a `code` property:
 
 ```typescript
-import { defineConfig } from 'dumi';
-
-export default defineConfig({
-  // Site base path (useful for GitHub Pages)
-  base: '/react-selection-docs/',
-
-  // Public path for assets
-  publicPath: '/react-selection-docs/',
-
-  // Site logo
-  logo: '/react-selection-docs/logo.png',
-
-  // Locales / languages
-  locales: [{ id: 'en-US', name: 'English' }],
-
-  // Resolve configuration
-  resolve: {
-    codeBlockMode: 'passive', // 'passive' | 'active'
-  },
-
-  // Theme configuration
-  themeConfig: {
-    name: 'Your Site Name',
-    description: 'Your site description',
-    nav: [
-      {
-        title: 'Guide',
-        link: '/guide/getting-started.md',
-      },
-    ],
-    nprogress: true,
-    socialLinks: {
-      github: 'https://github.com/your-username/your-repo',
-    },
-  },
-
-  // Custom styles
-  styles: [`/* Your custom CSS here */`],
-});
+enum ErrorCode {
+  MAX_LIMIT_EXCEED = 'MAX_LIMIT_EXCEED',
+}
 ```
 
-## Navigation
+### Handling Errors
 
-Configure the navigation menu in `themeConfig.nav`:
-
-```typescript
-nav: [
-  {
-    title: 'Guide',           // Nav item title
-    link: '/guide/index',     // Link to page
-  },
-  {
-    title: 'Components',
-    link: '/components/index',
-  },
-  {
-    title: 'External',
-    link: 'https://example.com', // External links work too
-  },
-],
+```tsx
+<ReactSelection
+  multiple
+  max={3}
+  data={items}
+  value={selectedItems}
+  onChange={setSelectedItems}
+  onError={(err) => {
+    if (err.code === ErrorCode.MAX_LIMIT_EXCEED) {
+      console.warn('Maximum selections reached');
+    }
+  }}
+  slots={{ item: ItemSlot }}
+/>
 ```
 
-## Sidebar
+## Key Extractor
 
-Dumi automatically generates sidebars based on your file structure:
+By default, keys are derived from `item.value`. You can customize this with `keyExtractor`:
 
-```
-docs/
-├── guide/
-│   ├── getting-started.md    # /guide/getting-started
-│   └── configuration.md      # /guide/configuration
-└── components/
-    └── index.md              # /components/index
-```
+### String Key
 
-## Custom Styles
+```tsx
+const items = [
+  { id: 1, value: 'apple', label: 'Apple' },
+  { id: 2, value: 'banana', label: 'Banana' },
+];
 
-Add custom styles in the `styles` option:
-
-```typescript
-styles: [
-  `
-  .dumi-default-sidebar {
-    --dumi-sidebar-width: 320px;
-  }
-  `,
-],
+<ReactSelection
+  data={items}
+  keyExtractor="id"
+  value={selected}
+  onChange={setSelected}
+  slots={{ item: ItemSlot }}
+/>;
 ```
 
-## Code Blocks
+### Function Key
 
-Configure code block behavior:
-
-```typescript
-resolve: {
-  // 'active' - shows React Playground for React code
-  // 'passive' - plain code blocks
-  codeBlockMode: 'passive',
-},
+```tsx
+<ReactSelection
+  data={items}
+  keyExtractor={(item, index) => `fruit-${item.value}`}
+  value={selected}
+  onChange={setSelected}
+  slots={{ item: ItemSlot }}
+/>
 ```
-
-## Modes
-
-Dumi supports different modes:
-
-- **Doc Mode** - Standard documentation pages
-- **Demo Mode** - Component demos with live preview
-- **Site Mode** - General-purpose website
-
-## More Configuration Options
-
-See the [official dumi documentation](https://d.umijs.org/config) for all available options.
