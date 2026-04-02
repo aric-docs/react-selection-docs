@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ReactSelection } from '@jswork/react-selection';
 
-// Data without a `value` field — use `id` instead
 const users = [
   { id: 1, name: 'Alice' },
   { id: 2, name: 'Bob' },
@@ -14,11 +13,11 @@ export default () => {
 
   return (
     <div>
-      <h3 style={{ marginBottom: '12px' }}>valueExtractor (string)</h3>
-      <p style={{ marginBottom: '8px', color: '#666' }}>
-        Using <code>valueExtractor="id"</code> — data has no <code>value</code> field
+      <h3 className="demo-header">valueExtractor (string)</h3>
+      <p className="demo-label">
+        Using <code className="text-xs bg-gray-100 px-1 py-0.5 rounded">valueExtractor="id"</code>
       </p>
-      <p style={{ marginBottom: '8px', color: '#666' }}>
+      <p className="demo-label">
         Selected ID: <strong>{selectedId}</strong>
       </p>
       <ReactSelection
@@ -30,21 +29,9 @@ export default () => {
           item: ({ item, active, onClick }) => (
             <button
               onClick={onClick}
-              style={{
-                padding: '8px 20px',
-                marginRight: '8px',
-                marginBottom: '8px',
-                border: '1px solid',
-                borderColor: active ? '#eb2f96' : '#d9d9d9',
-                borderRadius: '6px',
-                background: active ? '#eb2f96' : '#fff',
-                color: active ? '#fff' : '#333',
-                cursor: 'pointer',
-                fontSize: '14px',
-                transition: 'all 0.2s',
-              }}
+              className={`sel-btn sel-btn--pink${active ? ' active' : ''}`}
             >
-              <span style={{ marginRight: '4px', opacity: 0.6 }}>#{item.id}</span>
+              <span className="mr-1 opacity-50">#{item.id}</span>
               {item.name}
             </button>
           ),

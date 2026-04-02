@@ -15,19 +15,10 @@ export default () => {
 
   return (
     <div>
-      <h3 style={{ marginBottom: '12px' }}>Empty State</h3>
+      <h3 className="demo-header">Empty State</h3>
       <button
         onClick={() => setHasData(!hasData)}
-        style={{
-          marginBottom: '12px',
-          padding: '6px 16px',
-          border: '1px solid #1890ff',
-          borderRadius: '4px',
-          background: '#1890ff',
-          color: '#fff',
-          cursor: 'pointer',
-          fontSize: '13px',
-        }}
+        className="mb-3 px-4 py-1.5 bg-blue-500 text-white text-[13px] border border-blue-500 rounded cursor-pointer"
       >
         {hasData ? 'Clear Data' : 'Load Data'}
       </button>
@@ -39,32 +30,14 @@ export default () => {
           item: ({ item, active, onClick }) => (
             <button
               onClick={onClick}
-              style={{
-                padding: '8px 20px',
-                marginRight: '8px',
-                border: '1px solid',
-                borderColor: active ? '#1890ff' : '#d9d9d9',
-                borderRadius: '6px',
-                background: active ? '#1890ff' : '#fff',
-                color: active ? '#fff' : '#333',
-                cursor: 'pointer',
-                fontSize: '14px',
-              }}
+              className={`sel-btn sel-btn--blue${active ? ' active' : ''}`}
             >
               {item.label}
             </button>
           ),
           empty: () => (
-            <div
-              style={{
-                padding: '24px',
-                textAlign: 'center',
-                color: '#999',
-                border: '1px dashed #d9d9d9',
-                borderRadius: '6px',
-              }}
-            >
-              No items available. Click "Load Data" to add items.
+            <div className="py-6 text-center text-gray-400 border border-dashed border-gray-300 rounded-md">
+              No items available. Click &quot;Load Data&quot; to add items.
             </div>
           ),
         }}

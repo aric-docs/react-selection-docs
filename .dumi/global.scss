@@ -1,3 +1,57 @@
-body {
-  //color: red;
+// Demo page layout
+.demo-header {
+  @apply mb-3 text-base font-semibold;
+}
+
+.demo-label {
+  @apply mb-2 text-gray-500;
+}
+
+// Selection button base
+.sel-btn {
+  @apply px-5 py-2 mr-2 mb-2 rounded-md text-sm cursor-pointer transition-all duration-200 border bg-white text-gray-800 border-gray-300;
+}
+
+// Active color variants
+.sel-btn--blue.active {
+  @apply bg-blue-500 text-white border-blue-500;
+}
+
+.sel-btn--green.active {
+  @apply bg-green-500 text-white border-green-500;
+}
+
+.sel-btn--yellow.active {
+  @apply bg-yellow-500 text-white border-yellow-500;
+}
+
+.sel-btn--pink.active {
+  @apply bg-pink-500 text-white border-pink-500;
+}
+
+.sel-btn--cyan.active {
+  @apply bg-cyan-500 text-white border-cyan-500;
+}
+
+.sel-btn--purple.active {
+  @apply bg-purple-600 text-white border-purple-600;
+}
+
+// Disabled state
+.sel-btn:disabled {
+  @apply bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed;
+}
+
+// Pill shape variant
+.sel-btn--pill {
+  @apply rounded-full;
+}
+
+// Card variant (for non-button items, e.g. div with info)
+.sel-card {
+  @apply inline-block px-4 py-2.5 mr-2 mb-2 rounded-lg text-sm cursor-pointer transition-all duration-200 border bg-white text-gray-800 border-gray-300;
+}
+
+.sel-card--cyan.active {
+  @apply bg-cyan-500 text-white border-cyan-500;
 }

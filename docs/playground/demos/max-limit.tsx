@@ -17,14 +17,12 @@ export default () => {
 
   return (
     <div>
-      <h3 style={{ marginBottom: '12px' }}>Max Limit (3)</h3>
-      <p style={{ marginBottom: '8px', color: '#666' }}>
+      <h3 className="demo-header">Max Limit (3)</h3>
+      <p className="demo-label">
         Selected: <strong>{selected.length > 0 ? selected.join(', ') : 'None'}</strong>
         {' '}({selected.length}/3)
       </p>
-      {errorMsg && (
-        <p style={{ color: '#ff4d4f', marginBottom: '8px' }}>{errorMsg}</p>
-      )}
+      {errorMsg && <p className="mb-2 text-red-500">{errorMsg}</p>}
       <ReactSelection
         multiple
         max={3}
@@ -42,19 +40,7 @@ export default () => {
             <button
               disabled={disabled}
               onClick={onClick}
-              style={{
-                padding: '8px 20px',
-                marginRight: '8px',
-                marginBottom: '8px',
-                border: '1px solid',
-                borderColor: active ? '#faad14' : disabled ? '#f0f0f0' : '#d9d9d9',
-                borderRadius: '6px',
-                background: active ? '#faad14' : disabled ? '#f5f5f5' : '#fff',
-                color: active ? '#fff' : disabled ? '#bbb' : '#333',
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                fontSize: '14px',
-                transition: 'all 0.2s',
-              }}
+              className={`sel-btn sel-btn--yellow${active ? ' active' : ''}`}
             >
               {active ? '✓ ' : ''}{item.label}
             </button>
